@@ -10,7 +10,7 @@ RSpec.describe 'Users API', type: :request do
     }
   end
 
-  before { host! 'api.taskmanager.test' }
+  before { host! 'api.task-manager.test' }
 
   describe 'GET /users/:id' do 
     before do 
@@ -19,7 +19,6 @@ RSpec.describe 'Users API', type: :request do
 
     context 'when the user exists' do 
       it { expect(json_body[:id]).to eq(user_id) }
-
       it { expect(response).to have_http_status(200) }
     end
 
@@ -37,8 +36,7 @@ RSpec.describe 'Users API', type: :request do
     context 'when the request params are valid' do 
       let(:user_params) { attributes_for(:user) }
 
-      it { expect(response).to have_http_status(201) } 
-      
+      it { expect(response).to have_http_status(201) }  
       it { expect(json_body[:email]).to eq(user_params[:email]) }
     end
 
@@ -46,7 +44,6 @@ RSpec.describe 'Users API', type: :request do
       let(:user_params) { attributes_for(:user, email: 'invalid-@') }
 
       it { expect(response).to have_http_status(422) }
-
       it { expect(json_body).to have_key(:errors) }
     end
   end
@@ -59,7 +56,6 @@ RSpec.describe 'Users API', type: :request do
     context 'when the request params are valid' do 
       let(:user_params) { { email: 'new@taskmanager.com' } }
       it { expect(response).to have_http_status(200) } 
-
       it { expect(json_body[:email]).to eq(user_params[:email]) }
     end
 
@@ -67,7 +63,6 @@ RSpec.describe 'Users API', type: :request do
       let(:user_params) { attributes_for(:user, email: 'invalid-@') }
 
       it { expect(response).to have_http_status(422) }
-
       it { expect(json_body).to have_key(:errors) }
     end
   end
@@ -79,7 +74,6 @@ RSpec.describe 'Users API', type: :request do
     end
 
     it { expect(response).to have_http_status(204) }
-
     it { expect(User.find_by(id: user.id)).to be_nil }     
   end
 end
