@@ -74,7 +74,7 @@ RSpec.describe 'Users API', type: :request do
 
     context 'when the request params are invalid' do 
       let(:user_params) { attributes_for(:user, email: 'invalid-@') }
-      
+
       it { expect(response).to have_http_status(422) }
 
       it 'returns the JSON data for the errors' do 
@@ -82,5 +82,17 @@ RSpec.describe 'Users API', type: :request do
         expect(user_response).to have_key(:errors)
       end
     end
+  end
+
+  describe 'DELETE /users/:id' do 
+    before do 
+      headers = { 'Accept': 'application/vnd.taskmanager.v1' }
+      delete "/users/#{user_id}", params: { }, headers: headers
+    end
+
+    it { expect(response).to have_http_status(204) }
+
+    it { expect(User.find_by(id: user.id)).to be_nil }
+      
   end
 end
