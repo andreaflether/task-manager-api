@@ -16,7 +16,8 @@ class Api::V1::UsersController < ApplicationController
     if user.save 
       render json: user, status: 201
     else 
-      render json: { errors: user.errors }, status: 422
+      byebug
+      render json: { errors: user.errors.messages }, status: 422
     end
   end
 
@@ -26,7 +27,7 @@ class Api::V1::UsersController < ApplicationController
     if user.update(user_params)
       render json: user, status: 200
     else 
-      render json: { errors: user.errors }, status: 422
+      render json: { errors: user.errors.messages }, status: 422
     end
   end
 
