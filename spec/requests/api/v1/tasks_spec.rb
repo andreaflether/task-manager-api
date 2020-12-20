@@ -30,4 +30,27 @@ RSpec.describe 'Tasks API', type: :request do
     it { expect(response).to have_http_status(200) }
     it { expect(json_body[:title]).to eq(task.title)}
   end
+
+  describe 'POST /tasks' do 
+    before do 
+      post '/tasks', params: { task: task_params }.to_json, headers: headers
+    end
+
+    context 'when the params are valid' do
+      let(:task_params) { attributes_for(:task) }
+
+      it { expect(response).to have_http_status(201) }  
+      it { expect(Task.find_by(title: task_params[:title])).not_to be_nil }
+      it { expect(json_body[:title]).to eq(task_params[:title]) }
+      it { expect(json_body[:user_id]).to eq(user.id) }
+    end
+
+    context 'when the params are invalid' do
+      let(:task_params) { attributes_for(:task, title: '') }
+
+      it { expect(response).to have_http_status(422) }
+      it { expect(Task.find_by(title: task_params[:title])).to be_nil }
+      it { expect(json_body[:errors]).to have_key(:title) }
+    end
+  end
 end
