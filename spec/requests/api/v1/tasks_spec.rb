@@ -53,4 +53,28 @@ RSpec.describe 'Tasks API', type: :request do
       it { expect(json_body[:errors]).to have_key(:title) }
     end
   end
+
+  describe 'PUT /tasks/:id' do 
+    let!(:task) { create(:task, user_id: user.id) }
+    
+    before do 
+      put "/tasks/#{task.id}", params: { task: task_params }.to_json, headers: headers 
+    end
+
+    context 'when the params are valid' do 
+      let(:task_params) { { title: 'New task title' } }
+
+      it { expect(response).to have_http_status(200) }
+      it { expect(json_body[:title]).to eq(task_params[:title])}
+      it { expect(Task.find_by(title: task_params[:title])).not_to be_nil }
+    end
+
+    context 'when the params are invalid' do 
+      let(:task_params) { { title: '' } }
+
+      it { expect(response).to have_http_status(422) }
+      it { expect(json_body[:errors]).to have_key(:title) }
+      it { expect(Task.find_by(title: task_params[:title])).to be_nil }
+    end
+  end
 end
