@@ -18,12 +18,12 @@ RSpec.describe 'Tasks API', type: :request do
       get '/tasks', params: {}, headers: headers
     end
 
-    context 'when a search param is sent' do 
+    context 'when a sorting/search param is sent' do 
       let!(:poi_task_1) { create(:task, title: 'Rewatch POI', user_id: user.id) }
       let!(:root_task_1) { create(:task, title: 'Cry bc Root died', user_id: user.id) }
       let!(:root_task_2) { create(:task, title: 'Tweet about how much i love Root', user_id: user.id) }
 
-      before { get '/tasks', params: { q: { title_cont: 'Root' } }, headers: headers }
+      before { get '/tasks', params: { q: { title_cont: 'Root', s: 'ASC' } }, headers: headers }
 
       it 'returns only the matching tasks' do 
         return_task_titles = json_body[:data].map { |t| t[:attributes][:title] }
@@ -32,7 +32,7 @@ RSpec.describe 'Tasks API', type: :request do
       end
     end
     
-    context 'when no search param is sent' do 
+    context 'when no sorting/search param is sent' do 
       it { expect(response).to have_http_status(200) }
       it { expect(json_body[:data].count).to eq(5) }
     end
