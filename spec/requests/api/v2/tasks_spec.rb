@@ -19,16 +19,16 @@ RSpec.describe 'Tasks API', type: :request do
     end
 
     it { expect(response).to have_http_status(200) }
-    it { expect(json_body[:tasks].count).to eq(5) }
+    it { expect(json_body[:data].count).to eq(5) }
   end
-
+ 
   describe 'GET /tasks/:id' do 
     let(:task) { create(:task, user_id: user.id) }
 
     before { get "/tasks/#{task.id}", params: {}, headers: headers }
     
     it { expect(response).to have_http_status(200) }
-    it { expect(json_body[:title]).to eq(task.title)}
+    it { expect(json_body[:data][:attributes][:title]).to eq(task.title)}
   end
 
   describe 'POST /tasks' do 
@@ -39,8 +39,8 @@ RSpec.describe 'Tasks API', type: :request do
 
       it { expect(response).to have_http_status(201) }  
       it { expect(Task.find_by(title: task_params[:title])).not_to be_nil }
-      it { expect(json_body[:title]).to eq(task_params[:title]) }
-      it { expect(json_body[:user_id]).to eq(user.id) }
+      it { expect(json_body[:data][:attributes][:title]).to eq(task_params[:title]) }
+      it { expect(json_body[:data][:attributes][:'user-id']).to eq(user.id) }
     end
 
     context 'when the params are invalid' do
@@ -61,7 +61,7 @@ RSpec.describe 'Tasks API', type: :request do
       let(:task_params) { { title: 'New task title' } }
 
       it { expect(response).to have_http_status(200) }
-      it { expect(json_body[:title]).to eq(task_params[:title])}
+      it { expect(json_body[:data][:attributes][:title]).to eq(task_params[:title])}
       it { expect(Task.find_by(title: task_params[:title])).not_to be_nil }
     end
 
