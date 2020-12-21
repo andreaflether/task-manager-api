@@ -3,10 +3,10 @@ class Api::V1::SessionsController < ApplicationController
     user = User.find_by(email: session_params[:email])
 
     if user && user.valid_password?(session_params[:password])
-      render json: user, status: 200
+      sign_in user, store: false
       user.generate_auth_token!
       user.save
-      sign_in user, store: false
+      render json: user, status: 200
     else
       render json: { errors: user.errors }, status: 401
     end
