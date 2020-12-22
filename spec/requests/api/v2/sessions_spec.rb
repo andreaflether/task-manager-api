@@ -36,12 +36,15 @@ RSpec.describe 'Sessions API', type: :request do
     end
   end
 
-  describe 'DELETE /sessions/:id' do
+  describe 'DELETE /auth/sign_out' do
     let(:auth_token) { user.auth_token }
 
-    before { delete "/sessions/#{auth_token}", params: {}, headers: headers }
+    before { delete '/auth/sign_out', params: {}, headers: headers }
 
-    it { expect(response).to have_http_status(204) }
-    it { expect(User.find_by(auth_token: auth_token)).to be_nil }
+    it { expect(response).to have_http_status(200) }
+    it 'changes the user auth token' do 
+      user.reload
+      expect(user).not_to be_valid_token(auth_data['access-token'], auth_data['client'])
+    end
   end
 end
