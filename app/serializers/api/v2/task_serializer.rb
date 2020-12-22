@@ -3,7 +3,7 @@ class Api::V2::TaskSerializer < ActiveModel::Serializer
              :short_description, :is_late
 
   def short_description 
-    object.description.truncate(40)
+    object.description.truncate(40) if object.description.present?
   end
 
   def is_late
