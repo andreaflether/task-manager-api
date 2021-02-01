@@ -35,6 +35,7 @@ gem 'devise-i18n'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'faker', '~> 1.6', '>= 1.6.3'
   gem 'rspec-rails', '~> 3.5'
 end
 
@@ -42,7 +43,6 @@ group :test do
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'shoulda-matchers', '~> 3.1'
-  gem 'faker'
 end
 
 group :development do

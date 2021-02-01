@@ -28,6 +28,6 @@ module TaskManagerApi
     config.api_only = true
 
     # I18n
-    config.i18n.default_locale = :'pt-BR'
+    config.i18n.default_locale = :en
   end
 end
